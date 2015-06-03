@@ -1,4 +1,4 @@
-#!/usr/bin/env python3
+#!/usr/bin/env python
 
 # By Gary Bernhardt.
 # Dotfiles at: https://github.com/garybernhardt/dotfiles
@@ -8,7 +8,6 @@ import time
 import collections
 import zlib
 import bz2
-import lzma
 
 Result = collections.namedtuple('Result', ['size', 'ratio', 'time'])
 
@@ -18,7 +17,12 @@ def main():
     print("file size: {:,}".format(size))
     benchmark(data, "gzip", zlib)
     benchmark(data, "bz2", bz2)
-    benchmark(data, "xz", lzma)
+    try:
+        import lzma
+        benchmark(data, "xz", lzma)
+    except ImportError:
+        # lzma requires Python 3.
+        pass
 
 
 def benchmark(data, name, pkg):
